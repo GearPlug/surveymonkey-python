@@ -740,53 +740,52 @@ class Client(object):
         :return: 
         """
         error_code = error['error']['id']
+        error_message = error['message']
         if error_code == "1000":
-            raise BadRequestError("Unable to process the request with the provided input.")
+            raise BadRequestError(error_message)
         elif error_code == "1001":
-            raise BadRequestError("The body provided was not a proper JSON string.")
+            raise BadRequestError(error_message)
         elif error_code == "1002":
-            raise BadRequestError("Invalid schema in the body provided.")
+            raise BadRequestError(error_message)
         elif error_code == "1003":
-            raise BadRequestError("Invalid URL parameters.")
+            raise BadRequestError(error_message)
         elif error_code == "1004":
-            raise BadRequestError("Invalid request headers.")
+            raise BadRequestError(error_message)
         elif error_code == "1010":
-            raise AuthorizationError("The authorization token was not provided.")
+            raise AuthorizationError(error_message)
         elif error_code == "1011":
-            raise AuthorizationError("The authorization token provided was invalid.")
+            raise AuthorizationError(error_message)
         elif error_code == "1012":
-            raise AuthorizationError("The authorization token provided has expired.")
+            raise AuthorizationError(error_message)
         elif error_code == "1013":
-            raise AuthorizationError("Client revoked access to the authorization token provided.")
+            raise AuthorizationError(error_message)
         elif error_code == "1014":
-            raise PermissionError("Permission has not been granted by the user to make this request.")
+            raise PermissionError(error_message)
         elif error_code == "1015":
-            raise PermissionError("The user does not have the required plan to make this request.")
+            raise PermissionError(error_message)
         elif error_code == "1016":
-            raise PermissionError("The user does not have permission to access the resource.")
+            raise PermissionError(error_message)
         elif error_code == "1017":
-            raise PermissionError("The user has hit a quota limit on this resource.")
+            raise PermissionError(error_message)
         elif error_code == "1018":
-            raise PermissionError("The user does not have permission to access the host in this region. see \
-                    https://api.surveymonkey.net/v3/docs?python#access-url")
+            raise PermissionError(error_message)
         elif error_code == "1020":
-            raise ResourceNotFoundError("There was an error retrieving the requested resource.")
+            raise ResourceNotFoundError(error_message)
         elif error_code == "1025":
-            raise ResourceConflictError("Unable to complete the request due to a conflict. Check the settings for the \
-                    resource.")
+            raise ResourceConflictError(error_message)
         elif error_code == "1026":
-            raise ResourceConflictError("The requested resource already exists.")
+            raise ResourceConflictError(error_message)
         elif error_code == "1030":
-            raise RequestEntityTooLargeError("The requested entity is too large, it can not be returned.")
+            raise RequestEntityTooLargeError(error_message)
         elif error_code == "1040":
-            raise RateLimitReachedError("Too many requests were made, try again later.")
+            raise RateLimitReachedError(error_message)
         elif error_code == "1050":
-            raise InternalServerError("Oh bananas! We couldn’t process your request.")
+            raise InternalServerError(error_message)
         elif error_code == "1051":
-            raise InternalServerError("Service unreachable. Please try again later.")
+            raise InternalServerError(error_message)
         elif error_code == "1052":
-            raise UserSoftDeletedError("The user you are making this request for has been soft deleted.")
+            raise UserSoftDeletedError(error_message)
         elif error_code == "1053":
-            raise UserDeletedError("The user you are making this request for has been deleted.")
+            raise UserDeletedError(error_message)
         else:
             raise UnknownError("UNKNOWN ERROR: {}".format(error['message']))
