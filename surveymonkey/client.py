@@ -23,34 +23,37 @@ ACCESS_TOKEN_URL = "/oauth/token"
 
 class Client(object):
 
-    def __init__(self, access_token):
+    def __init__(self, client_id=None, client_secret=None, redirect_uri=None, access_token=None):
+        self.code = None
+        self.client_id = client_id
+        self.redirect_uri = redirect_uri
+        self.client_secret = client_secret
         self._access_token = access_token
 
     # Authorization
-    def get_authorization_url(self, client_id, redirect_uri):
+    def get_authorization_url(self):
         """
 
-        :param client_id:
-        :param redirect_uri:
         :return:
         """
-        params = {'client_id': client_id, 'redirect_uri': redirect_uri, 'response_type': 'code'}
+        params = {'client_id': self.client_id, 'redirect_uri': self.redirect_uri, 'response_type': 'code'}
         url = BASE_URL + AUTH_CODE + '?' + urlencode(params)
         return url
 
-    def exchange_code(self, code, client_id, client_secret, redirect_uri):
+    def exchange_code(self, code):
         """
 
         :param code:
-        :param client_id:
-        :param client_secret:
-        :param redirect_uri:
         :return:
         """
-        params = {'code': code, 'client_id': client_id, 'client_secret': client_secret,
-                  'redirect_uri': redirect_uri, 'grant_type': 'authorization_code'}
-        url = BASE_URL + ACCESS_TOKEN_URL + '?' + urlencode(params)
-        return self._post(url, data=params)
+        params = {'code': code, 'client_id': self.client_id, 'client_secret': self.client_secret,
+                  'redirect_uri': self.redirect_uri, 'grant_type': 'authorization_code'}
+        url = BASE_URL + ACCESS_TOKEN_URL
+        response = requests.post(url, data=params)
+        if response.status_code == 200 and 'access_token' in response.text:
+            return response.text
+        else:
+            return False
 
     def refresh_token(self):
         """
@@ -724,9 +727,9 @@ class Client(object):
     def get_error(self, error):
         """
 
-        :return: 
+        :return:
         """
-        error_code = error['error']['id']
+        error_code = error['error']
         error_message = error['message']
         if error_code == "1000":
             raise BadRequestError(error_message)
