@@ -716,7 +716,7 @@ class Client(object):
         else:
             r = response.text
         if "error" in r:
-            self.get_error(r)
+            self.get_error(dict(r))
         if "error" not in r and status_code not in [200, 201, 204]:
             raise UnknownError()
         if status_code in (200, 201):
