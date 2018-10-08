@@ -6,18 +6,6 @@ from surveymonkey.exceptions import UnknownError, BadRequestError, Authorization
     ResourceNotFoundError, ResourceConflictError, RequestEntityTooLargeError, RateLimitReachedError, \
     InternalServerError, UserSoftDeletedError, UserDeletedError
 
-# BASE_URL = 'https://www.zohoapis.com/crm/v2/'
-# ZOHOCRM_AUTHORIZE_URL = 'https://accounts.zoho.com/oauth/v2/auth'
-# ZOHOCRM_REQUEST_TOKEN_URL = 'https://accounts.zoho.com/oauth/v2/token'
-# ZOHOCRM_REFRESH_TOKEN_URL = "https://accounts.zoho.com/oauth/v2/token"
-# READ_MODULE_LIST = ['leads', 'accounts', 'contacts', 'deals', 'campaigns', 'tasks', 'cases', 'events', 'calls',
-#                     'solutions', 'products', 'vendors', 'pricebooks', 'quotes', 'salesorders', 'purchaseorders',
-#                     'invoices', 'custom', 'notes', 'approvals', 'dashboards', 'search', 'activities']
-# module purchaseorders, 'invoices', salesorders and quotes are temporarily disable for writing this
-# due to the complexity of the module
-# WRITE_MODULE_LIST = ['leads', 'accounts', 'contacts', 'deals', 'campaigns', 'tasks', 'cases', 'events', 'calls',
-#                      'solutions', 'products', 'vendors', 'pricebooks', 'purchaseorders', 'custom', 'notes']
-
 '''
 Token expiration and revocation
 Our access tokens don’t currently expire but may in the future. We’ll warn all developers before making changes.
@@ -35,33 +23,32 @@ ACCESS_TOKEN_URL = "/oauth/token"
 
 class Client(object):
 
-    def __init__(self, client_id, client_secret, redirect_uri, scope, access_type):
-        self.code = None
-        self.scope = scope
-        self.access_type = access_type
-        self.client_id = client_id
-        self.redirect_uri = redirect_uri
-        self.client_secret = client_secret
-        self._access_token = None
+    def __init__(self, access_token):
+        self._access_token = access_token
 
     # Authorization
-    def get_authorization_url(self):
+    def get_authorization_url(self, client_id, redirect_uri):
         """
 
+        :param client_id:
+        :param redirect_uri:
         :return:
         """
-        params = {'client_id': self.client_id, 'redirect_uri': self.redirect_uri, 'response_type': 'code'}
+        params = {'client_id': client_id, 'redirect_uri': redirect_uri, 'response_type': 'code'}
         url = BASE_URL + AUTH_CODE + '?' + urlencode(params)
         return url
 
-    def exchange_code(self, code):
+    def exchange_code(self, code, client_id, client_secret, redirect_uri):
         """
 
         :param code:
+        :param client_id:
+        :param client_secret:
+        :param redirect_uri:
         :return:
         """
-        params = {'code': code, 'client_id': self.client_id, 'client_secret': self.client_secret,
-                  'redirect_uri': self.redirect_uri, 'grant_type': 'authorization_code'}
+        params = {'code': code, 'client_id': client_id, 'client_secret': client_secret,
+                  'redirect_uri': redirect_uri, 'grant_type': 'authorization_code'}
         url = BASE_URL + ACCESS_TOKEN_URL + '?' + urlencode(params)
         return self._post(url, data=params)
 
@@ -736,7 +723,7 @@ class Client(object):
 
     def get_error(self, error):
         """
-        
+
         :return: 
         """
         error_code = error['error']['id']
