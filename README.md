@@ -26,7 +26,7 @@ client=Client(
 2- Extract `code` from the URL and send it as an argument in `client.exchange_code(code)`
 3- Remove the token from the response obtained and send it as an argument in `client.set_access_token(token)`
 
--Functionality methods, they refer to methods that make calls to the different endpoints of the SurveyMonkey API,
+- Functionality methods, they refer to methods that make calls to the different endpoints of the SurveyMonkey API,
 the use is quite simple:
 `client.method(args)`
 e.g. `client.get_survey_pages(survey_id)`
