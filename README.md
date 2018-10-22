@@ -9,14 +9,13 @@ pip install surveymonkey-python
 ## Usage
 
 - Instantiate client
-`from client import Client`
-`# If you do not have access_token, run`
 ```
+from client import Client
+# If you do not have access_token, run
+
 client=Client(
     client_id=CLIENT_ID, client_secret=CLIENT_SECRET, redirect_uri=REDIRECT_URI, access_token=None)
-```
-`# If you have access_token, run`
-```
+# If you have access_token, run
 client=Client(
     client_id=CLIENT_ID, client_secret=CLIENT_SECRET, redirect_uri=REDIRECT_URI, access_token=ACCESS_TOKEN)
 ```
