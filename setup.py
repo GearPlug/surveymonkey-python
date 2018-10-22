@@ -7,7 +7,7 @@ def read(fname):
 
 
 setup(name='surveymonkey-python',
-      version='0.1.0',
+      version='0.1.1',
       description='Python wrapper for SurveyMonkey API',
       long_description=read('README.md'),
       url='https://github.com/GearPlug/surveymonkey-python',
