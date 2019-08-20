@@ -665,15 +665,18 @@ class Client(object):
         url = API_URL + endpoint
         return self._get(url)
 
-    def get_response_bulk(self, survey_id):
+    def get_response_bulk(self, survey_id,params=None):
         """
         Retrieves a list of full expanded responses, including answers to all questions
         :param survey_id: id of survey to responses from
+        :param params: a dict of params to add to the request, possible values can be 
+                found at https://developer.surveymonkey.com/api/v3/#surveys-id-responses-bulk
         :return:
         """
         endpoint = "/surveys/{0}/responses/bulk".format(survey_id)
+
         url = API_URL + endpoint
-        return self._get(url)
+        return self._get(url,params=params)
 
     def get_response_details(self, survey_id, response_id):
         """
@@ -690,8 +693,8 @@ class Client(object):
         return self._get(url)
 
     # Communications
-    def _get(self, endpoint, ):
-        return self._request('GET', endpoint)
+    def _get(self, endpoint, **kwargs):
+        return self._request('GET', endpoint, **kwargs)
 
     def _post(self, endpoint, **kwargs):
         return self._request('POST', endpoint, **kwargs)
