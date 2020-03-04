@@ -194,6 +194,17 @@ class Client(object):
         url = API_URL + endpoint
         return self._get(url)
 
+    def get_survey_lists_bulk(self, params=None):
+        """
+        List all created surveys, allows for params to be added to the request, (eg. pagination).
+        :param params: a dict of params to add to the request, possible values can be 
+        found at https://developer.surveymonkey.com/api/v3/#surveys
+        :return:
+        """
+        endpoint = "/surveys"
+        url = API_URL + endpoint
+        return self._get(url, params=params)
+
     def get_specific_survey(self, survey_id):
         """
         Returns a survey’s details.
