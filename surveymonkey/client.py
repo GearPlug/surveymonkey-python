@@ -1,6 +1,7 @@
 import json
 import requests
 from urllib.parse import urlencode
+from math import ceil
 
 from surveymonkey.exceptions import UnknownError, BadRequestError, AuthorizationError, PermissionError, \
     ResourceNotFoundError, ResourceConflictError, RequestEntityTooLargeError, RateLimitReachedError, \
@@ -688,6 +689,29 @@ class Client(object):
 
         url = API_URL + endpoint
         return self._get(url,params=params)
+
+    def get_all_pages_response(self, survey_id, per_page=100) -> list:
+        """Get bulk responses from all pages.
+
+        :return list of bulk responses"""
+        all_resp = []
+        params = {'per_page': per_page}
+        resp = self.get_response_bulk(survey_id, params=params)
+        pages = ceil(resp['total']/per_page)
+        if pages > 1:
+            all_resp.append(resp)
+            if pages == 2:
+                params = {'per_page': per_page,
+                          'page': 2}
+                all_resp.append(self.get_response_bulk(survey_id, params=params))
+            else:
+                for page in range(2, pages+1, 1):
+                    params = {'per_page': per_page,
+                              'page': page}
+                    all_resp.append(self.get_response_bulk(survey_id, params=params))
+            return all_resp
+        else:
+            return [resp]
 
     def get_response_details(self, survey_id, response_id):
         """
