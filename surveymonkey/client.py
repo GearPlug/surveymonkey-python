@@ -1,5 +1,7 @@
 import json
 import requests
+import http.client
+
 from urllib.parse import urlencode
 from math import ceil
 
@@ -80,9 +82,16 @@ class Client(object):
         Returns the current user’s account details including their plan.
         :return:
         """
-        endpoint = "/users/me"
-        url = API_URL + endpoint
-        return self._get(url)
+        headers = {
+            'Accept': "application/json",
+            'Authorization': "Bearer {"+self._access_token+"}"
+            }
+        conn = http.client.HTTPSConnection("api.surveymonkey.com")
+        conn.request("GET", "/v3/users/me", headers=headers)
+        res = conn.getresponse()        
+        data = res.read().decode('utf-8')      
+        format = json.loads(data)
+        return format
 
     def get_user_workgroup(self, user_id):
         """
@@ -157,7 +166,7 @@ class Client(object):
         :return:
         """
         endpoint = "/webhooks"
-        url = API_URL + endpoint
+        url = API_URL + endpoint        
         return self._get(url)
 
     def create_webhook(self, survey_id, callback_uri, event, webhook_name, object_type):
@@ -174,6 +183,8 @@ class Client(object):
         }
         endpoint = "/webhooks"
         url = API_URL + endpoint
+
+        z = self._post(url, json=payload)
         return self._post(url, json=payload)
 
     def delete_webhook(self, webhook_id):

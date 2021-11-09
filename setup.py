@@ -7,7 +7,7 @@ def read(fname):
 
 
 setup(name='surveymonkey-python',
-      version='0.1.4',
+      version='0.1.41',
       description='Python wrapper for SurveyMonkey API',
       long_description=read('README.md'),
       long_description_content_type="text/markdown",
