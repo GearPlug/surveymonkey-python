@@ -767,8 +767,12 @@ class Client(object):
 
         :return:
         """
-        error_code = error['error']
-        error_message = error['message']
+        try:
+            error_code = error['error']['id']
+            error_message = error['error']['message']
+        except:
+            error_code = error['error']
+            error_message = error['message']
         if error_code == "1000":
             raise BadRequestError(error_message)
         elif error_code == "1001":
